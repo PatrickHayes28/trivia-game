@@ -2,49 +2,76 @@
 // and select "Open with Live Server"
 
 // YOUR CODE HERE!
-
 // the start game button will have to load the first question after i fetch the data from jservice api
 //I want the questions and answers in an array and remove them from the array after they are used
+let questionsArr = [];
+let isCorrect = true;
+let randomCategory = fetch(
+  `https://jservice.io/api/category?id=${Math.floor(Math.random() * 10) + 1}`
+)
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    for (let i = 0; i < data.clues.length; i += 1) {
+      let question = data.clues[i].question;
+      questionsArr.push(question);
+    }
+    console.log(questionsArr);
+  });
 
-function fetch("https://jservice.io/api/category"){
-  method: "GET";
-}
- .then(response => response.json())
- .then(data)
+// shows the first question
+document.getElementById("start").addEventListener("click", function (e) {
+  e.preventDefault();
+  // 1. hide login screen
+  document.querySelector(".start-game").style.display = "none";
+});
 
-// shows the first question 
+// 2. show categories list screen
+document.querySelector(".screen-categories").style.display = "block";
 function startGame() {
-
+  document.createElement("h3");
+  h3.innerHtML = questionsArr[Math.floor(Math.random() * questionsArr.length)]; //this gets a random question
+  body.append(h3);
 }
 
-addEventListener("click", event);
+addEventListener("click", startGame);
 //the submit button should submit the answer
 //then answer should be checked if it's correct and then display a message if they are correct,
-function checkAnswer(){
-  let isCorrect = answer === apiAnswer;
+document.querySelectorAll(".screen-category").forEach(function (category) {
+  category.addEventListener("click", function () {
+    // 1. hide the categories screen
+    document.querySelector(".screen-category").style.display = "none";
+  });
+});
 function submitButton() {
   if (isCorrect === true) {
-    return;
+    return nextQuestion;
   } else {
     return newGame();
   }
 }
+
+addEventListener("click", submitButton);
+
+//then award 1 point and the game continues
+function updateScore() {
+  let score = score + 1;
 }
-
-
-addEventListener("click", event);
-//then award the point and the game continues
-function updateScore() {}
+//advances the game to the next question
+function nextQuestion() {}
 
 //in the event of a wrong answer the game should end and start new game button should start the game over
- //and reset the score to 0
+//and reset the score to 0
 function newGame() {
- 
+  updateScore = 0;
+  document.createElement("h1");
+  h1.innerText = "GAME OVER";
+  body.append(h1);
 }
 
-addEventListener("click", event);
+addEventListener("click", newGame);
 
-//DIRECTIONS:MINIMUM VIABLE PRODUCTUse fetch to pull questions from the jservice api, Present a single question to the userAllow the user to respond to the questionDetermine if the user's answer was correct  awards one (1) point and continues the game An incorrect answer resets the game and resets the score to zero (0)Keep track of and display a user's score.
+//DIRECTIONS:MINIMUM VIABLE PRODUCT Use fetch to pull questions from the jservice api, Present a single question to the userAllow the user to respond to the questionDetermine if the user's answer was correct  awards one (1) point and continues the game An incorrect answer resets the game and resets the score to zero (0)Keep track of and display a user's score.
 
 //my psudo code I want to use buttons to advance through the game. i want to put the questions in an array and use a method for removing used questions from the game so i have no repeats. I want the "correct" message to appear in the middle between the question and answer boxes and i want the user's score to appear above the answer box.
 
