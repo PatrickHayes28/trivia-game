@@ -1,1 +1,12 @@
 /* Write your CSS Here. */
+#startscreen {
+  color: white;
+  align-items: center;
+}
+
+#screenquestions {
+}
+
+#screengameover {
+  background-color: red;
+}
