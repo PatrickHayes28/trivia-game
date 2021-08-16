@@ -16,7 +16,8 @@ let displayCategory = document.querySelector(".category"); //gv for displaying t
 let randomQuestion; // gv for the question
 let currentQuestion = ""; // gv for the current question starting as a empty string
 let arrayOfQuestions; //gv for the array of questions
-let newQuestion = document.querySelector(".nextgame"); // gv for getting the next question
+let newQuestion = document.querySelector(".nextquestion"); // gv for getting the next question
+let newGame = document.querySelector(".nextgame"); //selects the button next question
 
 //the fetch
 let randomCategory = fetch(
@@ -33,7 +34,6 @@ let randomCategory = fetch(
     randomQuestion[Math.floor(Math.random() * data.length)]; // gets a  single question from the random array
     apiAnswer = randomQuestion.answer.toString().toLowerCase(); // pulling from the random array and giving whatever it decided to give
     console.log(apiAnswer); //answer from api
-    console.log(randomQuestion); // question from api
     currentQuestion = randomQuestion.question;
     displayQuestion.append(currentQuestion);
 
@@ -48,45 +48,44 @@ console.log(categoryArr);
 
 // shows the first question
 function startGame() {
-  document.querySelector("#startscreen").style.display = "none"; // 1. hide start game screen
+  document.querySelector("#startscreen").style.display = "none"; // hide start game screen
   document.querySelector("#screenquestions").style.display = null; //show the question screen
   displayQuestion.innerHTML = currentQuestion; //displays it on the page
   document.body.append(displayQuestion);
   console.log(category);
   displayCategory.innerHTML = category;
 }
-let startscreen = document.querySelector("#startscreen");
+let startscreen = document.querySelector(".startgame");
 startscreen.addEventListener("click", startGame);
 
 //checks the answer and displays appropriate message
-
 function submitButton(e) {
   e.preventDefault();
   document.querySelector("#screenquestions").style.display = "none"; //hide the question after clicking submit
-  //console.log(userAnswer);
-  console.log(apiAnswer);
   if (userAnswerElement.value.toString().toLowerCase() === apiAnswer) {
-    document.querySelector("#startscreen").style.display = "none";
-    userAnswerElement.value = "";
-    newScore = score + 1;
+    //check if the answer is correct
+    document.querySelector("#startscreen").style.display = "none"; //hide the start screen
+    userAnswerElement.value = ""; // make user answer a empty string
+    newScore = score + 1; // give 1 point
     let p = document.querySelector(".score");
     p.innerHTML = `score ${newScore}`;
     let h2 = document.createElement("h2");
     h2.innerHTML = `Correct! your score is ${newScore}`;
-    document.body.append(h2);
-    newQuestion.addEventListener("click", nextQuestion);
-    document.querySelector("#screenquestions").style.display = null;
+    document.body.append(h2); //70-74 display a correct message and display the point onto the page
+    newQuestion.addEventListener("click", nextQuestion); // get a new question
+    document.querySelector("#screenquestions").style.display = null; //show the next question
   } else {
     newScore = 0;
-    screengameover.style.display = null;
-    startGame();
+    screengameover.style.display = null; //show game over screen
+    //document.querySelector("#screenquestions").style.display = "none";
+    newGame.addEventListener("click", startGame); //call start game to start a new game
   }
 }
 
 //advances the game to the next question
 function nextQuestion() {
-  document.querySelector("#startscreen").style.display = "none";
-  let nextQuestion = randomQuestion.question;
+  document.querySelector("#startscreen").style.display = "none"; // hide the start  screen
+  newQuestion = randomQuestion.question;
   displayQuestion.innerHTML = nextQuestion; //this gets a random question
   apiAnswer = nextQuestion;
   console.log("it works");
