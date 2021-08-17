@@ -45,8 +45,6 @@ let randomCategory = fetch(
     let submit = document.querySelector(".submit"); //event listener for my submit button
     submit.addEventListener("click", submitButton);
   });
-console.log(questionsArr);
-console.log(categoryArr);
 
 // shows the first question
 function startGame() {
@@ -54,7 +52,7 @@ function startGame() {
   document.querySelector("#screenquestions").style.display = null; //show the question screen
   displayQuestion.innerHTML = currentQuestion; //displays current question on the page
   document.body.append(displayQuestion);
-  displayCategory.innerHTML = category;
+  displayCategory.innerHTML = category; //displays the category
 }
 let startscreen = document.querySelector(".startgame");
 startscreen.addEventListener("click", startGame);
@@ -66,7 +64,7 @@ function submitButton() {
     //check if the answer is correct
     document.querySelector("#startscreen").style.display = "none"; //hide the start screen
     userAnswerElement.value = ""; // make user answer a empty string
-    newScore = score + 1; // give 1 point
+    newScore = score += 1; // give 1 point
     let p = document.querySelector(".score");
     p.innerHTML = `score ${newScore}`; //displys score in the header
     let h2 = document.createElement("h2");
@@ -80,14 +78,12 @@ function submitButton() {
     setTimeout(startGame, 1000);
     window.location.reload();
     newGame.addEventListener("click", startGame()); //call start game to start a new game when new game is clicked
-    console.log(newGame);
   }
 }
 
 //advances the game to the next question
 function nextQuestion() {
   document.querySelector("#startscreen").style.display = "none"; // hide the start  screen
-
   arrayOfQuestions = Object.keys(getData.clues); // turned array to object with key value pair
   questionsArr = Math.floor(Math.random() * arrayOfQuestions.length); //randomizing the array
   randomQuestion = getData.clues[arrayOfQuestions[questionsArr]]; //randomizing the clues array of questions and the questions array
@@ -95,6 +91,7 @@ function nextQuestion() {
   currentQuestion = randomQuestion.question; // assign it to the current  question
   apiAnswer = randomQuestion.answer.toLowerCase().toString(); //assigning the answer and displaying it
   displayQuestion.innerHTML = currentQuestion;
+  console.log(apiAnswer);
 }
 
 //DIRECTIONS:MINIMUM VIABLE PRODUCT Use fetch to pull questions from the jservice api, Present a single question to the userAllow the user to respond to the questionDetermine if the user's answer was correct  awards one (1) point and continues the game An incorrect answer resets the game and resets the score to zero (0)Keep track of and display a user's score.
