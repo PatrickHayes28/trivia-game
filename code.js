@@ -18,26 +18,24 @@ let randomQuestion; // gv for the questions
 let currentQuestion = ""; // gv for the current question starting as a empty string
 let newQuestion = document.querySelector(".nextquestion"); // gv for getting the next question
 let newGame = document.querySelector(".newgame"); //selects the button next question
-let getData; //gv for data fetched from the api
 
-//the fetch
+//the fetch for the category
 let randomCategory = fetch(`https://jservice.io/api/random`)
   .then((response) => response.json())
   .then((data) => {
     console.log(data);
-    // puts the questions in an array
-    //data.clues is the array of questions
-    let category = data[0].category_id;
-    //2nd fetch
+    let category = data[0].category_id; // gets the category id number in the api
+    displayCategory = data[0].category.title; //gets the category and sets it to a h3 element
+    console.log(data[0].category_title); // says undefined
+    screenquestions.append(displayCategory); // displays the api category on screenquestions
+
+    //2nd fetch for the questions
     let categoryQuestions = fetch(
       `https://jservice.io/api/clues?category=${category}`
     )
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-
         categoryArr = data;
-
         questionsArr = Math.floor(Math.random() * categoryArr.length); //taking the index and randomizing it
         randomQuestion = categoryArr[questionsArr]; // taking a single question out of the mix of both
         randomQuestion[Math.floor(Math.random() * data.length)]; // gets a  single question from the random array
@@ -45,9 +43,8 @@ let randomCategory = fetch(`https://jservice.io/api/random`)
         console.log(apiAnswer); //answer from the api
         currentQuestion = randomQuestion.question;
         displayQuestion.append(currentQuestion); // displays the question
-        displayCategory = data.title; //gets the category and sets it to a h3 element
         screenquestions.append(displayHeadline); // displays the headline "category" on the screenquestions
-        screenquestions.append(displayCategory); // displays the api category on screenquestions
+
         submit = document.querySelector(".submit"); //event listener for my submit button
         submit.addEventListener("click", submitButton);
       });
@@ -66,8 +63,10 @@ startscreen.addEventListener("click", startGame);
 
 //checks the answer and displays appropriate message
 function submitButton() {
-  //document.querySelector("#screenquestions").style.display = "none"; //hide the question after clicking submit and show the correct message and the next question button
-  if (userAnswerElement.value.toString().toLowerCase() === apiAnswer) {
+  document.querySelector("#screenquestions").style.display = "none"; //hide the question after clicking submit and show the correct message and the next question button
+  if (
+    userAnswerElement.value.toString().toLowerCase() === apiAnswer.toLowerCase()
+  ) {
     //check if the answer is correct
     document.querySelector("#startscreen").style.display = "none"; //hide the start screen
     userAnswerElement.value = ""; // make user answer a empty string
@@ -77,7 +76,7 @@ function submitButton() {
     let h2 = document.createElement("h2");
     h2.id = "h2";
     h2.innerHTML = `Correct! your score is ${newScore}`;
-    document.body.append(h2); //70-74 display a correct message and display the point onto the page
+    document.body.append(h2); //80-84 display a correct message and display the point onto the page
     newQuestion.addEventListener("click", nextQuestion); // get a new question
   } else {
     newScore = 0;
@@ -92,14 +91,13 @@ function submitButton() {
 //advances the game to the next question
 function nextQuestion() {
   document.querySelector("#startscreen").style.display = "none"; // hide the start  screen
-  document.querySelector("#h2").innerHTML = "";
-  categoryArr = Object.keys(getData.clues); // turned array to object with key value pair
-  questionsArr = Math.floor(Math.random() * categoryArr.length); //randomizing the array
-  randomQuestion = getData.clues[categoryArr[questionsArr]]; //randomizing the clues array of questions and the questions array
-  randomQuestion[Math.floor(Math.random() * getData.length)]; //pulling the question
-  currentQuestion = randomQuestion.question; // assign it to the current  question
-  apiAnswer = randomQuestion.answer.toLowerCase().toString(); //assigning the answer and displaying it
-  displayQuestion.innerHTML = currentQuestion;
+  document.querySelector("#screenquestions").style.display = "block";
+  document.querySelector("#useranswer").value = "";
+  let random = Math.floor(Math.random() * categoryArr.length);
+  let currentQuestion = categoryArr[random].question;
+  document.querySelector("#screenquestions").innerHTML = currentQuestion;
+  apiAnswer = categoryArr[random].answer;
+
   console.log(apiAnswer);
 }
 
